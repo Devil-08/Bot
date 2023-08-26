@@ -60,9 +60,9 @@ global.psaweria = 'https://saweria.co/Zykomd'
 
 /*============== NOMOR ==============*/
 global.nomorbot = '62XXX'
-global.nomorown = '6283133329293'
-global.namebot = 'ZYKOBOTZ MD'
-global.nameown = 'ZYKO MD'
+global.nomorown = '918010431346'
+global.namebot = 'Syntax MD'
+global.nameown = 'Devil'
 
 /*============== Github Thanks To ==============*/
 global.namagithub = 'ZykoBotz-MD'
@@ -80,7 +80,7 @@ global.lolkey = pickRandom(["e54205a4ca2caa368cc067bb", "8e66d0934cf741bfd2182c1
 
 /*============== STAFF ==============*/
 global.owner = [
-  ['6283133329293', 'ZYKO MD', true],
+  ['9180431346', 'Devil', true],
   ['-', 'ISI KALAU ADA', true],
   ['-', 'ISI KALAU ADA', true],
   ['-', 'ISI KALAU ADA', true],
@@ -131,13 +131,13 @@ global.APIKeys = {
 
 /*============== WATERMARK ==============*/
 global.wm = '                「 ZYKOBOTZ MD 」'
-global.wm2 = '꒷︶꒷꒥꒷ ‧₊˚ ꒰ฅ˘ZYKOBOTZ MD ˘ฅ ꒱ ‧₊˚꒷︶꒷꒥꒷'
-global.wm3 = "⫹⫺ ZYKOBOTZ MD"
+global.wm2 = '꒷︶꒷꒥꒷ ‧₊˚ ꒰ฅ˘Syntax MD ˘ฅ ꒱ ‧₊˚꒷︶꒷꒥꒷'
+global.wm3 = "⫹⫺ Syntax MD"
 global.botdate = `⫹⫺ DATE: ${week} ${date}\n⫹⫺ TIME: ${wktuwib}`
 global.bottime = `T I M E : ${wktuwib}`
 global.titlebot = `⫹⫺ WhatsApp Bot | By ZYKO MD`
 global.packname = '☂︎ ᴄʀᴇᴀᴛᴇᴅ ʙʏ'
-global.author = "ZYKOBOTZ MD 乂 ZYKO MD"
+global.author = "Syntax MD 乂 Devil"
 global.footer = 'ꜱɪᴍᴘʟᴇ ᴡʜᴀᴛꜱᴀᴘᴘ ʙᴏᴛ ᴍᴀᴅᴇ ʙʏ ᴢʏᴋᴏ ᴍᴅ ッ'
 /*Fake*/
 global.fsizedoc = SizeDoc()
