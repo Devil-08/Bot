@@ -85,14 +85,36 @@ global.loadDatabase = async function loadDatabase() {
 }
 loadDatabase()
 
-global.authFile = `${opts._[0] || 'session'}.data.json`
-const { state, saveState } = store.useSingleFileAuthState(global.authFile)
+const sessionFolder = opts._[0] || 'sessions';
+const authFileName = 'creds.json';
+const sessionFolderPath = path.join(__dirname, sessionFolder);
+const sessionPath = path.join(sessionFolderPath, 'sessions');
+const authFilePath = path.join(sessionPath, authFileName);
+
+if (!fs.existsSync(sessionFolderPath)) {
+  fs.mkdirSync(sessionFolderPath, { recursive: true });
+}
+
+if (!fs.existsSync(sessionPath)) {
+  fs.mkdirSync(sessionPath);
+}
+
+const { state, saveState } = store.useSingleFileAuthState(authFilePath);
+
+
+const msgRetryCounterMap = MessageRetryMap => { }
 
 const connectionOptions = {
-  printQRInTerminal: true,
-  auth: state,
-  // logger: pino({ level: 'trace' })
-  logger: pino({ level: 'silent' })
+printQRInTerminal: true,
+patchMessageBeforeSending: (message) => {
+const requiresPatch = !!( message.buttonsMessage || message.templateMessage || message.listMessage );
+if (requiresPatch) { message = { viewOnceMessage: { message: { messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {}, }, ...message, },},};}
+return message;},
+getMessage: async (key) => ( opts.store.loadMessage(/** @type {string} */(key.remoteJid), key.id) || opts.store.loadMessage(/** @type {string} */(key.id)) || {} ).message || { conversation: 'Please send messages again' },   
+msgRetryCounterMap,
+logger: pino({ level: 'silent' }),
+auth: state,
+browser: ['Thank U ZYKOBOTZ MD','Safari','9.7.0']
 }
 
 global.conn = makeWASocket(connectionOptions)
@@ -109,8 +131,8 @@ if (!opts['test']) {
 }
 if (opts['server']) (await import('./server.js')).default(global.conn, PORT)
 
-
-function clearTmp() {
+/* Clear */
+async function clearTmp() {
   const tmp = [tmpdir(), join(__dirname, './tmp')]
   const filename = []
   tmp.forEach(dirname => readdirSync(dirname).forEach(file => filename.push(join(dirname, file))))
@@ -120,26 +142,36 @@ function clearTmp() {
     return false
   })
 }
+setInterval(async () => {
+	var a = await clearTmp()
+	console.log(chalk.cyanBright('Successfully clear tmp'))
+}, 180000)
 
-
-
+/* Update */
 async function connectionUpdate(update) {
   const { connection, lastDisconnect, isNewLogin } = update
+  global.stopped = connection
   if (isNewLogin) conn.isInit = true
   const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
   if (code && code !== DisconnectReason.loggedOut && conn?.ws.readyState !== CONNECTING) {
     console.log(await global.reloadHandler(true).catch(console.error))
     global.timestamp.connect = new Date
-    
   }
   if (global.db.data == null) loadDatabase()
-}
-
+  if (update.qr != 0 && update.qr != undefined) {
+    console.log(chalk.yellow('🚩 Scan this QR code, the QR code expires in 60 seconds.'))
+    }
+  if (connection == 'open') { console.log(chalk.yellow('Made by ' + author)) }
+  console.log(JSON.stringify(update, null, 4))
+  if (update.receivedPendingNotifications) return this.sendButton(nomorown + '@s.whatsapp.net', 'Bot Successfully Connected', author, null, [['MENU', '/menu']], null)
+  if (connection == 'close') {
+    console.log(chalk.yellow(`🚩ㅤConnection closed, if the bot doesn't respond, delete the ${global.authFile} folder/file and re-scan the QR code`))}
+    }
 
 process.on('uncaughtException', console.error)
 // let strQuot = /(["'])(?:(?=(\\?))\2.)*?\1/
 
-let isInit = true;
+let isInit = true
 let handler = await import('./handler.js')
 global.reloadHandler = async function (restatConn) {
   try {
